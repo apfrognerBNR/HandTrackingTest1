@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@2.1.0/dist/tf-core.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script><
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+        
+        <link rel="stylesheet" href="css/index.css">
+    </head>
+    <body>
+
+        <p><span id="errorMsg"></span></p>
+    
+    <!-- Stream video via webcam -->
+    <div class="video-wrap">
+        <video id="video" playsinline autoplay></video>
+    </div>
+    
+    <!-- Trigger canvas web API -->
+    <div class="controller">
+        <button id="snap">Capture</button>
+    </div>
+    
+    <!-- Webcam video snapshot -->
+    <canvas id="canvas" width="1280" height="768"></canvas>
+
+    <div id="cool" class="cool"></div>
+
+    <script src="js/handRec.js"></script>
+    <script src="js/otherCrap.js"></script>
+    <script>
+        var cool = document.getElementById("cool");
+        var items = ["test1","test2","test3","test4","test5","test6","test7","test8","test9","test10"]
+        var accum = 0;
+
+        function buildList() {
+            var outp = "<select>";
+
+
+            items.forEach(ite => {
+                outp = outp + "<option>" + ite + "</option>"
+            })
+
+            outp = outp + "</select>";
+            cool.innerHTML = outp;
+        }
+
+        async function controlNumber() {
+
+            hands = await model.estimateHands(video);
+                hands.forEach(hand => {
+                    var handPos = recHandPos(hand.landmarks);
+
+                    if (handPos.thumbOut) {
+                        accum += 500;
+                    }
+                    
+                    if (handPos.isUp && !handPos.isOpen) {
+                        accum++;
+                    } else if (!handPos.isUp && !handPos.isOpen) {
+                        accum--;
+                    }
+                });
+
+            cool.innerHTML = accum;
+        }
+
+        setInterval(controlNumber,1);
+    </script>
+
+
+
+    </body>
+</html>

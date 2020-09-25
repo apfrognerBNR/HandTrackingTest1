@@ -1,0 +1,21 @@
+video {
+    width: 768;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    }
+
+canvas {
+    position: absolute;
+    width: 768;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    border: 2px red solid;
+}
+
+.cool {
+    position: relative;
+    top: 500;
+}
